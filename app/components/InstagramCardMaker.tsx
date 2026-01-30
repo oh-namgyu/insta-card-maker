@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Download, Upload, RefreshCw } from 'lucide-react';
+import { Download, Upload, RefreshCw, Copy, Check } from 'lucide-react';
 
 const InstagramCardMaker = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -12,6 +12,24 @@ const InstagramCardMaker = () => {
   const [rightText, setRightText] = useState('데이터로 통하는\n"완벽한 소통"');
   const [leftSubText, setLeftSubText] = useState('"네... (사실 모름)"');
   const [rightSubText, setRightSubText] = useState('"아! 이거였군요!"');
+  const [caption, setCaption] = useState(`🔥 Before vs After 🔥
+
+소통이 안 될 때 vs 소통이 될 때
+
+✅ 변화의 시작은 작은 한 걸음부터!
+
+#카드뉴스 #비포애프터 #변화 #성장 #동기부여`);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCaption = async () => {
+    try {
+      await navigator.clipboard.writeText(caption);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('복사 실패:', err);
+    }
+  };
 
   const loadDefaultLeftImage = () => {
     const img = new Image();
@@ -292,6 +310,39 @@ const InstagramCardMaker = () => {
             </div>
 
           </div>
+        </div>
+      </div>
+
+      {/* Instagram Caption Section */}
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mt-6">
+        <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📝</span>
+            <h2 className="font-bold text-gray-800">인스타그램 캡션</h2>
+          </div>
+          <button
+            onClick={handleCopyCaption}
+            className={`px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-all ${
+              copied
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            }`}
+          >
+            {copied ? <Check size={16} /> : <Copy size={16} />}
+            {copied ? '복사됨!' : '복사하기'}
+          </button>
+        </div>
+        <div className="p-4">
+          <textarea
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            placeholder="인스타그램에 올릴 문구를 작성하세요..."
+            className="w-full p-4 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none bg-gray-50"
+            rows={6}
+          />
+          <p className="text-xs text-gray-400 mt-2">
+            💡 팁: 해시태그를 활용하면 노출이 높아집니다!
+          </p>
         </div>
       </div>
 
